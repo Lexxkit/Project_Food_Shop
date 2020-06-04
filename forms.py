@@ -18,13 +18,11 @@ def password_check(form, field):
         raise ValidationError(msg)
 
 
-# TODO: write validator_func for same mail check
 def email_unique_check(form, field):
     msg = 'Пользователь с указанной почтой уже существует'
     user = User.query.filter_by(mail=field.data).first()
     if user:
         raise ValidationError(msg)
-
 
 
 class LoginForm(FlaskForm):
