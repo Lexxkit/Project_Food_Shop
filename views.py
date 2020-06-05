@@ -1,15 +1,15 @@
 import locale
-from functools import wraps
 from collections import Counter
+from functools import wraps
+from random import sample
 
 from flask import flash, render_template, redirect, session
 
 from app import app, db
 from models import Category, Meal, User, Order
 from forms import OrderForm, RegistrationForm, LoginForm
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-
 
 # set language for datetime object
 locale.setlocale(locale.LC_ALL, 'ru_RU')
@@ -23,6 +23,7 @@ def login_required(f):
         if not session.get('user'):
             return redirect('/login/')
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -43,11 +44,15 @@ def main():
     # Get session cart and total_price for nav_menu
     cart, _, total_price = cart_info()
 
-    # Get categories to render from DB
+    # Get categories from DB
     categories_query = Category.query.all()
-    categories = [cat for cat in categories_query]
+    # Create dictionary with 3 random meal from each category
+    random_meals = {}
+    for cat in categories_query:
+        random_meals[cat.title] = sample(cat.meals, 3)
 
-    return render_template('main.html', categories=categories, meals_count=len(cart), total_price=total_price)
+    return render_template('main.html', random_meals=random_meals,
+                           meals_count=len(cart), total_price=total_price)
 
 
 @app.route('/addtocart/<int:meal_id>')
@@ -56,7 +61,7 @@ def add_to_cart(meal_id):
     cart = session.get('cart', [])
     cart.append(meal_id)
     session['cart'] = cart
-    # If user previously delete position from cart, change state for render banner
+    # If user previously delete position from cart, change state for banner
     if session.get('del_banner'):
         session['del_banner'] = False
     return redirect('/cart/')
@@ -67,7 +72,7 @@ def delete_meal():
     cart = session.get('cart')
     cart.pop()
     session['cart'] = cart
-    # This is used for render 'delete' banner on 'cart.html'
+    # This is used to display 'delete' banner at 'cart.html'
     session['del_banner'] = True
     return redirect('/cart/')
 
@@ -137,9 +142,9 @@ def login():
             flash('Рады видеть Вас снова!')
             return redirect('/account/')
         elif not user:
-            # TODO: Add errors instead flash
-            flash('Такого пользователя не существует. Проверьте почту или зарегистрируйтесь!')
-            return render_template('login.html', form=form)
+            form.mail.errors.append('Такого пользователя не существует. Проверьте введенную почту.')
+        else:
+            form.password.errors.append('Неверный пароль.')
 
     return render_template('login.html', form=form)
 
@@ -173,10 +178,12 @@ def ordered():
     return render_template('ordered.html')
 
 
-@app.route('/admin/')
-def admin():
-    form = LoginForm()
-    return render_template('auth.html')
+# Hide Admin panel from unauthorized users
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        if not session.get('user'):
+            return False
+        return True
 
 
 class MyUserView(ModelView):
@@ -187,8 +194,35 @@ class MyUserView(ModelView):
     can_edit = False
     can_delete = True
 
-admin = Admin(app)
+    def is_accessible(self):
+        if not session.get('user'):
+            return False
+        return True
+
+
+class MyCategoryView(ModelView):
+    def is_accessible(self):
+        if not session.get('user'):
+            return False
+        return True
+
+
+class MyMealView(ModelView):
+    def is_accessible(self):
+        if not session.get('user'):
+            return False
+        return True
+
+
+class MyOrderView(ModelView):
+    def is_accessible(self):
+        if not session.get('user'):
+            return False
+        return True
+
+
+admin = Admin(app, index_view=MyAdminIndexView())
 admin.add_view(MyUserView(User, db.session))
-admin.add_view(ModelView(Category, db.session))
-admin.add_view(ModelView(Meal, db.session))
-admin.add_view(ModelView(Order, db.session))
+admin.add_view(MyCategoryView(Category, db.session))
+admin.add_view(MyMealView(Meal, db.session))
+admin.add_view(MyOrderView(Order, db.session))

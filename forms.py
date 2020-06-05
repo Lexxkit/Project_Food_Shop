@@ -53,5 +53,3 @@ class OrderForm(FlaskForm):
                             DataRequired(),
                             Length(min=5, max=11,
                                    message='Телефон должен быть не менее 5 и не более 11 цифр')])
-
-    # TODO: Add hidden fields total_cost or delete it from html and get from session

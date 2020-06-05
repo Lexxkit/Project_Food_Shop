@@ -10,20 +10,21 @@
         <p class="pt-4">Доставка дронами</p>
       </div>
     </section>
-    {% for category in categories %}
+    {% for category, meals in random_meals.items() %}
     <section>
-      <h3 class="my-4">{{ category.title }}</h3>
+      <h3 class="my-4">{{ category }}</h3>
       <div class="row mt-4">
-        {% for meal in category.meals %}
+        {% for meal in meals %}
         <div class="col-12 col-md-4 mb-3">
           <div class="card h-100 mb-4">
-            <img src="/static/images/{{ meal.picture }}" width="300" height="240" class="card-img-top" alt="">
+            <img src="/static/images/{{ meal.picture }}" class="card-img-top img-fluid" alt="">
             <div class="card-body">
               <h4 class="h5 card-title">{{ meal.title }}</h4>
               <p class="card-text">{{ meal.description }}</p>
             </div>
             <div class="card-footer bg-white border-top-0">
-                <a href="/addtocart/{{ meal.id }}" class="btn btn-success">В корзину</a>
+                <a href="/addtocart/{{ meal.id }}" class="btn btn-success float-right">В корзину</a>
+                <p class="card-text">{{ meal.price }} Р</p>
             </div>
           </div>
         </div>

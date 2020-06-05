@@ -1,7 +1,6 @@
-"""
-This script is used for initial export
-data from csv files to the App DB Tables.
-Run add_data_to_db() at python console after db migration.
+"""This script is used for initial export
+data from csv files to the App DB Tables. Import this script and
+run add_data_to_db() at python console after db migration.
 """
 
 import csv
