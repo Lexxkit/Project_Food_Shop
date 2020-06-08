@@ -46,9 +46,12 @@
             {{ form.hidden_tag() }}
 
             {% if session.user %}
-            <button type="submit" class=" mt-3 mb-5 btn btn-danger">Оформить заказ</button>
+            <button type="submit" class=" mt-3 mb-3 btn btn-danger">Оформить заказ</button>
             {% endif %}
           </form>
+          <p class="h7 font-weight-light text-center mt-1">Внимание! Это учебный проект - не вводите свой настоящий адрес и телефон!</p>
+          <p class="h7 font-weight-light text-center">Адрес: 1 или более любых символов</p>
+          <p class="h7 font-weight-light text-center">Пример телефона: 123456</p>
         </div>
 
 
@@ -69,7 +72,7 @@
               <th scope="row">{{ meal.title }}</th>
               <td></td>
               <td>{{ num }}</td>
-              <td>{{ meal.price }}</td>
+              <td>{{ meal.price * num }}</td>
               <td><a class="text-danger" href="/delete/">Удалить</a></td>
             </tr>
             {% endfor %}
