@@ -19,7 +19,6 @@ locale.setlocale(locale.LC_ALL, 'ru_RU')
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print('login_required')
         if not session.get('user'):
             return redirect('/login/')
         return f(*args, **kwargs)
