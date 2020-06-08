@@ -1,6 +1,7 @@
 """This script is used for initial export
-data from csv files to the App DB Tables. Import this script and
-run add_data_to_db() at python console after db migration.
+data from csv files to the App DB Tables. (Import this script and
+run add_data_to_db() at python console after db migration. - уточнить см. ниже)
+Run this script after flask DB migration and upgrade.
 """
 
 import csv
@@ -45,3 +46,6 @@ def add_data_to_db():
         add_categories()
         add_meals()
 
+
+if __name__ == '__main__':
+    add_data_to_db()
