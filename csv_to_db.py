@@ -34,8 +34,10 @@ def add_meals():
         for meal in meals:
             uid, title, price, description, picture, category_id = meal
             category_query = Category.query.get(int(category_id))
-            new_meal = Meal(title=title, price=price, description=description,
-                            picture=picture, category=category_query)
+            new_meal = Meal(
+                title=title, price=price, description=description,
+                picture=picture, category=category_query
+            )
             db.session.add(new_meal)
 
     db.session.commit()

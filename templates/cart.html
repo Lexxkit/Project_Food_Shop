@@ -51,17 +51,11 @@
           </form>
         </div>
 
-
-
-
-
         </div>
-
-
 
       <div class="col-1"></div>
       <div class="col-7">
-        <h4 class="mb-3 col-7 mb-5">{{ meals_count }} блюдо в корзине</h4>
+        <h4 class="mb-3 col-7 mb-5">{{ meals_count }} {{ meal_word }} в корзине</h4>
         <table class="table">
           <tbody>
             {% for meal, num in meals.items() %}

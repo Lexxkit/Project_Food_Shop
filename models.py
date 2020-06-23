@@ -7,10 +7,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 
 
-orders_meals_assosiation = db.Table('orders_meals',
-                                    db.Column('order_id', db.Integer, db.ForeignKey('orders.id')),
-                                    db.Column('meal_id', db.Integer, db.ForeignKey('meals.id'))
-                                    )
+orders_meals_assosiation = db.Table(
+    'orders_meals',
+    db.Column('order_id', db.Integer, db.ForeignKey('orders.id')),
+    db.Column('meal_id', db.Integer, db.ForeignKey('meals.id'))
+)
 
 
 class User(db.Model):
@@ -41,7 +42,8 @@ class Meal(db.Model):
     picture = db.Column(db.String(32))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     category = db.relationship('Category', back_populates='meals')
-    orders = db.relationship('Order', secondary=orders_meals_assosiation, back_populates='meals')
+    orders = db.relationship('Order', secondary=orders_meals_assosiation,
+                             back_populates='meals')
 
 
 class Category(db.Model):
@@ -62,4 +64,5 @@ class Order(db.Model):
     address = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='orders')
-    meals = db.relationship('Meal', secondary=orders_meals_assosiation, back_populates='orders')
+    meals = db.relationship('Meal', secondary=orders_meals_assosiation,
+                            back_populates='orders')

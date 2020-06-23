@@ -32,7 +32,8 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     mail = StringField('Электропочта',
-                       validators=[DataRequired(), Email(message='Это не похоже на почту, попробуйте еще раз!'),
+                       validators=[DataRequired(),
+                                   Email(message='Это не похоже на почту, попробуйте еще раз!'),
                                    email_unique_check]
                        )
     password = PasswordField(
@@ -47,7 +48,9 @@ class OrderForm(FlaskForm):
     name = StringField('Ваше имя', validators=[DataRequired()])
     address = StringField('Адрес', validators=[DataRequired()])
     mail = StringField('Электропочта',
-                       validators=[DataRequired(), Email(message='Это не похоже на почту, попробуйте еще раз!')])
+                       validators=[DataRequired(),
+                                   Email(message='Это не похоже на почту, попробуйте еще раз!')]
+                       )
     phone = StringField('Телефон',
                         validators=[
                             DataRequired(),

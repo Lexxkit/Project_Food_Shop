@@ -108,7 +108,8 @@ def cart_page():
             session.pop('cart')
         return redirect('/ordered/')
 
-    return render_template('cart.html', form=form, meals=unique_meals, meals_count=len(cart), total_price=total_price)
+    return render_template('cart.html', form=form, meals=unique_meals,
+                           meals_count=len(cart), total_price=total_price)
 
 
 @app.route('/account/')
