@@ -1,20 +1,22 @@
 """This script is used for initial export
 data from csv files to the App DB Tables. (Import this script and
-run add_data_to_db() at python console after db migration. - уточнить см. ниже)
+run add_data_to_db() at python console after db upgrade)
 Run this script after flask DB migration and upgrade.
 """
 
 import csv
+import os
 
 from models import db, Category, Meal
 from app import app
+from config import current_path
 
 
 def add_categories():
     """Export data from csv categories file
     to SQL DB table 'categories'.
     """
-    with open('delivery_categories.csv', newline='') as csv_file:
+    with open(os.path.join(current_path, 'delivery_categories.csv'), newline='') as csv_file:
         categories = [cat for cat in csv.reader(csv_file)][1:]
 
         for uid, title in categories:
@@ -28,7 +30,7 @@ def add_meals():
     """Export data from csv items file
         to SQL DB table 'meals'.
         """
-    with open('delivery_items.csv', newline='') as csv_file:
+    with open(os.path.join(current_path,'delivery_items.csv'), newline='') as csv_file:
         meals = [meal for meal in csv.reader(csv_file)][1:]
 
         for meal in meals:
