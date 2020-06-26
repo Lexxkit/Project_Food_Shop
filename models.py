@@ -36,7 +36,7 @@ class User(db.Model):
 class Meal(db.Model):
     __tablename__ = 'meals'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(32), nullable=False, unique=True)
+    title = db.Column(db.String(256), nullable=False, unique=True)
     price = db.Column(db.Numeric(6, 2), nullable=False)
     description = db.Column(db.Text, nullable=False)
     picture = db.Column(db.String(32))

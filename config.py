@@ -7,7 +7,7 @@ db_path = f'sqlite:///{current_path}/test.db'
 
 
 class Config:
-    DEBUG = True
+    DEBUG = False
     SECRET_KEY = 'randomstring'
-    SQLALCHEMY_DATABASE_URI = db_path
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
