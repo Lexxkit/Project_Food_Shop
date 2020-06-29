@@ -6,10 +6,12 @@ Run this script after flask DB migration and upgrade.
 
 import csv
 import os
+from flask.cli import AppGroup
 
 from models import db, Category, Meal
-from app import app
 from config import current_path
+
+data_cli = AppGroup('add_data')
 
 
 def add_categories():
@@ -30,7 +32,7 @@ def add_meals():
     """Export data from csv items file
         to SQL DB table 'meals'.
         """
-    with open(os.path.join(current_path,'delivery_items.csv'), newline='') as csv_file:
+    with open(os.path.join(current_path, 'delivery_items.csv'), newline='') as csv_file:
         meals = [meal for meal in csv.reader(csv_file)][1:]
 
         for meal in meals:
@@ -45,10 +47,10 @@ def add_meals():
     db.session.commit()
 
 
+@data_cli.command('data')
 def add_data_to_db():
-    with app.app_context():
-        add_categories()
-        add_meals()
+    add_categories()
+    add_meals()
 
 
 if __name__ == '__main__':
